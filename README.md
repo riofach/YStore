@@ -1,6 +1,6 @@
 # ystore
 
-A new Flutter project.
+don't forget flutter pub get
 
 ## Getting Started
 
