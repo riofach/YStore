@@ -4,7 +4,7 @@ import '../services/add_product.dart'; // Import the add product screen
 import '../services/auth_service.dart'; // Import AuthService
 
 class ManageProductScreen extends StatefulWidget {
-  final String role; // User role passed from the previous screen
+  final String role;
 
   ManageProductScreen({required this.role});
 
@@ -40,14 +40,14 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
             TextButton(
               child: Text("Batal"),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: Text("Hapus"),
               onPressed: () {
                 _deleteProduct(productId, productName);
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -61,7 +61,7 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
       context: context,
       isScrollControlled: true,
       builder: (context) {
-        return AddProductScreen(productId: productId); // Pass productId
+        return AddProductScreen(productId: productId);
       },
     );
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart'; // Import intl package for date formatting
-import 'package:intl/date_symbol_data_local.dart'; // Import date symbol data
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 class NotificationsScreen extends StatefulWidget {
   @override
@@ -14,8 +14,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting(
-        'id_ID', null); // Initialize date formatting for Indonesian locale
+    initializeDateFormatting('id_ID', null);
   }
 
   @override

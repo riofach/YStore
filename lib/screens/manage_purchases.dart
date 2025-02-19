@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart'; // Import intl package for date formatting
-import 'package:intl/date_symbol_data_local.dart'; // Import date symbol data
-import '../services/add_purchase.dart'; // Import the add purchase screen
-import 'purchase_details_screen.dart'; // Import purchase details screen
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import '../services/add_purchase.dart';
+import 'purchase_details_screen.dart';
 
 class ManagePurchasesScreen extends StatefulWidget {
   @override
@@ -41,14 +41,14 @@ class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
             TextButton(
               child: Text("Batal"),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: Text("Hapus"),
               onPressed: () {
                 _deletePurchase(purchaseId);
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -93,7 +93,7 @@ class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
   void initState() {
     super.initState();
     initializeDateFormatting(
-        'id_ID', null); // Initialize date formatting for Indonesian locale
+        'id_ID', null); // date formatting for Indonesian locale
   }
 
   @override
