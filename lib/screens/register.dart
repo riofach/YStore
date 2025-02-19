@@ -81,8 +81,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'username': username,
         'email': email,
         'password': hashedPassword,
-        'role': _selectedRole, // Gunakan role yang dipilih
-        'status': _selectedStatus, // Gunakan status yang dipilih
+        'role': _selectedRole,
+        'status': _selectedStatus,
         'createdAt': Timestamp.now(),
       });
 

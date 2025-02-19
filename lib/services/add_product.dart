@@ -27,7 +27,10 @@ class _AddProductScreenState extends State<AddProductScreen> {
     'Beras',
     'Minuman',
     'Makanan',
+    'Bumbu Makanan',
     'Bumbu Dapur',
+    'Rokok',
+    'Toilet',
     'Lainnya'
   ];
 

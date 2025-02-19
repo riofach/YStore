@@ -28,6 +28,7 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
           'name': data['name'],
           'sellPrice': data['sellPrice'],
           'stock': data['stock'],
+          'category': data['category'],
         });
       }
       setState(() {
@@ -116,7 +117,6 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
 
       String saleId = _firestore.collection('sales').doc().id;
       await _firestore.collection('sales').doc(saleId).set({
-        'id': saleId,
         'products': _selectedProducts,
         'totalQuantity': totalQuantity,
         'totalAmount': totalAmount,
@@ -154,6 +154,7 @@ class _AddSaleScreenState extends State<AddSaleScreen> {
         'name': product['name'],
         'sellPrice': product['sellPrice'],
         'quantity': quantity,
+        'category': product['category'],
       });
     });
   }

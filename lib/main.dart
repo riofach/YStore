@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'YSTORE',
+      // theme: ThemeData(
+      //   visualDensity: VisualDensity.adaptivePlatformDensity,
+      // ),
       debugShowCheckedModeBanner: false,
       home: LoginScreen(),
       routes: {

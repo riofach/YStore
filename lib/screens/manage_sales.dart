@@ -65,14 +65,14 @@ class _ManageSalesScreenState extends State<ManageSalesScreen> {
             TextButton(
               child: Text("Batal"),
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
             TextButton(
               child: Text("Hapus"),
               onPressed: () {
                 _deleteSale(saleId);
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -109,7 +109,7 @@ class _ManageSalesScreenState extends State<ManageSalesScreen> {
   void initState() {
     super.initState();
     initializeDateFormatting(
-        'id_ID', null); // Initialize date formatting for Indonesian locale
+        'id_ID', null); // date formatting for Indonesian locale
     String? currentUserId = _authService.getCurrentUserUid();
     if (currentUserId != null) {
       _authService.getUserRole(currentUserId).then((role) {
