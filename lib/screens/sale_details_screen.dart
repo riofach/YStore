@@ -147,7 +147,7 @@ class SaleDetailsScreen extends StatelessWidget {
                       SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () => _downloadInvoice(context),
-                        child: Text('Download Invoice'),
+                        child: Text('Invoice'),
                       ),
                     ],
                   );
