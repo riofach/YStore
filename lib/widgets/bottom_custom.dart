@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:ystore/config/app_color.dart';
 
-class ButtomCustom extends StatelessWidget {
-  const ButtomCustom({
+class BottomCustom extends StatelessWidget {
+  const BottomCustom({
     super.key,
     required this.label,
     required this.onTap,

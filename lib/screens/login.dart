@@ -3,10 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ystore/config/app_assets.dart';
 import 'package:ystore/config/app_color.dart';
-import 'package:ystore/widgets/buttom_custom.dart';
+import 'package:ystore/widgets/bottom_custom.dart';
 import '../services/auth_service.dart';
 import 'dashboard_screen.dart';
-import 'register_super.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -125,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                           ),
                           Text(
-                            'Masukkan akun Anda',
+                            'Masukkan Akun Anda',
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineMedium!
@@ -143,7 +142,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextFormField(
                       controller: _emailController,
-                      validator: (value) => value == '' ? "Don't empty" : null,
                       decoration: InputDecoration(
                         isDense: true,
                         filled: true,
@@ -173,7 +171,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     TextFormField(
                       controller: _passwordController,
                       obscureText: !_isPasswordVisible,
-                      validator: (value) => value == '' ? "Don't empty" : null,
                       decoration: InputDecoration(
                         isDense: true,
                         filled: true,
@@ -213,7 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(
                       height: 30,
                     ),
-                    ButtomCustom(
+                    BottomCustom(
                       label: 'Login',
                       isExpand: false,
                       onTap: () {
