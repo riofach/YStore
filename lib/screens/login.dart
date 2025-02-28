@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .copyWith(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 15,
-                                  color: AppColor.textPrimary,
+                                  color: AppColor.grey,
                                 ),
                           ),
                         ],
@@ -151,13 +151,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           vertical: 16,
                         ),
                         hintText: 'Email',
-                        hintStyle: TextStyle(color: AppColor.textPrimary),
+                        hintStyle: TextStyle(color: AppColor.grey),
                         prefixIcon: const Icon(Icons.email),
-                        prefixIconColor: AppColor.textPrimary,
+                        prefixIconColor: AppColor.grey,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide:
-                              const BorderSide(color: AppColor.textPrimary),
+                              const BorderSide(color: AppColor.grey),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -180,9 +180,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           vertical: 16,
                         ),
                         hintText: 'Password',
-                        hintStyle: TextStyle(color: AppColor.textPrimary),
+                        hintStyle: TextStyle(color: AppColor.grey),
                         prefixIcon: const Icon(Icons.password),
-                        prefixIconColor: AppColor.textPrimary,
+                        prefixIconColor: AppColor.grey,
                         suffixIcon: IconButton(
                           icon: Icon(
                             _isPasswordVisible
@@ -195,11 +195,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             });
                           },
                         ),
-                        suffixIconColor: AppColor.textPrimary,
+                        suffixIconColor: AppColor.grey,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
                           borderSide:
-                              const BorderSide(color: AppColor.textPrimary),
+                              const BorderSide(color: AppColor.grey),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
