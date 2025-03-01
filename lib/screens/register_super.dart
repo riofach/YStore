@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login.dart';
-import '../services/auth_service.dart'; // Import AuthService
+import '../services/auth_service.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -77,7 +77,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           .set({
         'username': username,
         'email': email,
-        'password': hashedPassword, // Simpan password yang sudah di-hash
+        'password': hashedPassword,
         'role': _selectedRole,
         'status': _selectedStatus,
         'createdAt': Timestamp.now(),
