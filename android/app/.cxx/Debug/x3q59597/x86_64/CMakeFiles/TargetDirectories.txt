@@ -1,0 +1,2 @@
+D:/Semester 6/YStore/android/app/.cxx/Debug/x3q59597/x86_64/CMakeFiles/edit_cache.dir
+D:/Semester 6/YStore/android/app/.cxx/Debug/x3q59597/x86_64/CMakeFiles/rebuild_cache.dir

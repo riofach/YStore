@@ -56,6 +56,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('Role saat build: ${widget.role}');
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard YStore'),
