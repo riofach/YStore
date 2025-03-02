@@ -174,7 +174,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 decoration: InputDecoration(
                   isDense: true,
                   filled: true,
-                  fillColor: AppColor.lightGrey,
+                  fillColor: AppColor.greyLight,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16,
@@ -203,7 +203,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 decoration: InputDecoration(
                   isDense: true,
                   filled: true,
-                  fillColor: AppColor.lightGrey,
+                  fillColor: AppColor.greyLight,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16,
@@ -232,7 +232,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 decoration: InputDecoration(
                   isDense: true,
                   filled: true,
-                  fillColor: AppColor.lightGrey,
+                  fillColor: AppColor.greyLight,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16,
@@ -273,7 +273,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 decoration: InputDecoration(
                   isDense: true,
                   filled: true,
-                  fillColor: AppColor.lightGrey,
+                  fillColor: AppColor.greyLight,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16,
@@ -303,7 +303,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 decoration: InputDecoration(
                   isDense: true,
                   filled: true,
-                  fillColor: AppColor.lightGrey,
+                  fillColor: AppColor.greyLight,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16,
@@ -333,7 +333,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 decoration: InputDecoration(
                   isDense: true,
                   filled: true,
-                  fillColor: AppColor.lightGrey,
+                  fillColor: AppColor.greyLight,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16,
@@ -363,7 +363,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 decoration: InputDecoration(
                   isDense: true,
                   filled: true,
-                  fillColor: AppColor.lightGrey,
+                  fillColor: AppColor.greyLight,
                   contentPadding: const EdgeInsets.symmetric(
                     horizontal: 16,
                     vertical: 16,

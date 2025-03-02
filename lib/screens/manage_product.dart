@@ -117,7 +117,8 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
       case 5:
         Navigator.pushAndRemoveUntil(
           context,
-          MaterialPageRoute(builder: (context) => ManageRoleScreen()),
+          MaterialPageRoute(
+              builder: (context) => ManageRoleScreen(role: widget.role)),
           (route) => false,
         );
         break;

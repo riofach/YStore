@@ -1,8 +1,8 @@
 name: ystore
-description: "A new Flutter project."
+description: 'A new Flutter project.'
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -41,6 +41,7 @@ dependencies:
   url_launcher: ^6.3.1
   open_file: ^3.5.10
   fl_chart: ^0.70.2
+  dropdown_button2: ^2.3.9
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -89,12 +90,14 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Open Sans
+    - family: Poppins
       fonts:
-        - asset: assets/fonts/OpenSans-Bold.ttf
-        - asset: assets/fonts/OpenSans-Regular.ttf
-        - asset: assets/fonts/OpenSans-Italic.ttf
-        - asset: assets/fonts/OpenSans-BoldItalic.ttf
+        - asset: assets\fonts\Poppins-Black.ttf
+        - asset: assets\fonts\Poppins-Bold.ttf
+        - asset: assets\fonts\Poppins-ExtraBold.ttf
+        - asset: assets\fonts\Poppins-Medium.ttf
+        - asset: assets\fonts\Poppins-Regular.ttf
+        - asset: assets\fonts\Poppins-SemiBold.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
@@ -104,7 +107,7 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 flutter_launcher_icons:
-  android: "launcher_icon"
+  android: 'launcher_icon'
   ios: true
-  image_path: "assets/logo.png"
+  image_path: 'assets/logo.png'
   min_sdk_android: 21

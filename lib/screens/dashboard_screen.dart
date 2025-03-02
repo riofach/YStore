@@ -161,7 +161,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ManageRoleScreen())),
+                                builder: (context) =>
+                                    ManageRoleScreen(role: widget.role))),
                         child: Text('Kelola Role/User'),
                       ),
                     if (widget.role == 'admin' ||
