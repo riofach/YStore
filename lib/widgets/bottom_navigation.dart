@@ -36,7 +36,7 @@ class CustomBottomNavigation extends StatelessWidget {
       2: (context) => ManageSalesScreen(),
       3: (context) => ManagePurchasesScreen(),
       4: (context) => NotificationsScreen(),
-      if (role == 'superAdmin') 5: (context) => ManageRoleScreen(),
+      if (role == 'superAdmin') 5: (context) => ManageRoleScreen(role: role),
     };
   }
 
