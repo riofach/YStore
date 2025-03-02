@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lottie/lottie.dart';
 import 'package:ystore/config/app_assets.dart';
 import 'package:ystore/config/app_color.dart';
 import 'package:ystore/widgets/bottom_custom.dart';
@@ -28,6 +29,38 @@ class _LoginScreenState extends State<LoginScreen> {
       );
       return;
     }
+
+    // Tampilan loading screen
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Lottie.asset(
+              'assets/loading.json',
+              width: 100,
+              height: 100,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Mohon Tunggu Sebentar...',
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+    await Future.wait([
+      Future.delayed(const Duration(seconds: 2)),
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc('userCredential.user?.uid')
+          .get(),
+    ]);
+
+    // await Future.delayed(const Duration(seconds: 3));
 
     try {
       // Login dengan Firebase Authentication
@@ -70,6 +103,9 @@ class _LoginScreenState extends State<LoginScreen> {
         print(
             'Role sebelum navigasi: ${userData['role']}'); // Log role sebelum navigasi
         // Berhasil login, redirect ke dashboard
+        if (context.mounted) {
+          Navigator.of(context).pop();
+        }
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
@@ -145,6 +181,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextFormField(
                       controller: _emailController,
+                      textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         isDense: true,
                         filled: true,
