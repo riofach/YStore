@@ -27,8 +27,8 @@ class BottomCustom extends StatelessWidget {
                 boxShadow: [
                   BoxShadow(
                     color: const Color.fromARGB(255, 116, 146, 170),
-                    offset: const Offset(0, 5),
-                    blurRadius: 5,
+                    offset: const Offset(0, 1),
+                    blurRadius: 50,
                   ),
                 ],
               ),
