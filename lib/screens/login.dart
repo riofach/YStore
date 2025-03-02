@@ -254,6 +254,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         _login();
                       },
+                      borderRadius: 50,
+                      width: 122,
                     ),
                   ],
                 ),

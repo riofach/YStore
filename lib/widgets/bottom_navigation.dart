@@ -89,9 +89,7 @@ class CustomBottomNavigation extends StatelessWidget {
               ),
               child: Icon(
                 icons[index],
-                color: currentIndex == index
-                    ? const Color.fromARGB(255, 119, 151, 209)
-                    : Colors.grey,
+                color: currentIndex == index ? AppColor.secondary : Colors.grey,
                 size: currentIndex == index ? 30 : 26,
               ),
             ),
