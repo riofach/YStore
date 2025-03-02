@@ -82,7 +82,6 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
           if (snapshot.hasError) {
             return Center(child: Text("Terjadi error: ${snapshot.error}"));
           }
-
           if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
             return Center(child: Text("Tidak ada data produk."));
           }
