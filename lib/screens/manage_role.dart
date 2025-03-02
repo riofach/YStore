@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ystore/config/add_color.dart';
 import '../services/auth_service.dart';
 import 'login.dart';
 import 'register.dart'; // Untuk navigasi setelah logout
@@ -35,7 +36,6 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Kelola Role/User'),
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -52,7 +52,28 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "Kelola User",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: AppColor.primary,
+                  ),
+                ),
+                Image.asset(
+                  'assets/logo.png',
+                  width: 50,
+                  height: 50,
+                )
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10),
             child: TextField(
               onChanged: (value) {
                 setState(() {
@@ -60,6 +81,9 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
                 });
               },
               decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 labelText: 'Cari berdasarkan email atau role',
                 prefixIcon: Icon(Icons.search),
               ),
@@ -96,17 +120,25 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
                         !data['role'].toLowerCase().contains(_searchQuery)) {
                       return Container();
                     }
-
-                    return ListTile(
-                      title: Text(data['email']),
-                      subtitle: Text(
-                          "Role: ${data['role']}, Status: ${data['status']}"),
-                      trailing: Switch(
-                        value: data['status'] == 'active',
-                        onChanged: (bool newValue) {
-                          _toggleUserStatus(
-                              snapshot.data!.docs[index].id, data['status']);
-                        },
+                    return Container(
+                      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                      child: Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: ListTile(
+                          title: Text(data['email']),
+                          subtitle: Text(
+                              "Role: ${data['role']}, Status: ${data['status']}"),
+                          trailing: Switch(
+                            value: data['status'] == 'active',
+                            onChanged: (bool newValue) {
+                              _toggleUserStatus(snapshot.data!.docs[index].id,
+                                  data['status']);
+                            },
+                          ),
+                        ),
                       ),
                     );
                   },
@@ -124,7 +156,16 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
             MaterialPageRoute(builder: (context) => RegisterScreen()),
           );
         },
-        child: Icon(Icons.add),
+        backgroundColor: AppColor.secondary,
+        foregroundColor: AppColor.white,
+        elevation: 8.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Icon(
+          Icons.add,
+          size: 35,
+        ),
       ),
     );
   }
