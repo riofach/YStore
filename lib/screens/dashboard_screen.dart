@@ -7,11 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:ystore/config/app_color.dart';
 import '../services/auth_service.dart';
 import 'login.dart';
-import 'manage_role.dart';
-import 'manage_product.dart';
-import 'manage_sales.dart';
-import 'notifications_screen.dart';
-import 'manage_purchases.dart';
 
 class DashboardScreen extends StatefulWidget {
   final String role;
@@ -272,48 +267,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     );
                   }
                 },
-              ),
-              SizedBox(height: 20),
-              if (widget.role == 'superAdmin')
-                ElevatedButton(
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ManageRoleScreen(role: widget.role))),
-                  child: Text('Kelola Role/User'),
-                ),
-              if (widget.role == 'admin' ||
-                  widget.role == 'superAdmin' ||
-                  widget.role == 'kasir')
-                ElevatedButton(
-                  onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              ManageProductScreen(role: widget.role))),
-                  child: Text('Kelola Produk'),
-                ),
-              ElevatedButton(
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ManageSalesScreen())),
-                child: Text('Kelola Penjualan'),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ManagePurchasesScreen())),
-                child: Text('Kelola Pembelian'),
-              ),
-              ElevatedButton(
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationsScreen())),
-                child: Text('Notifikasi'),
               ),
             ],
           ),
