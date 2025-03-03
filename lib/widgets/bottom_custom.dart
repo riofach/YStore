@@ -20,62 +20,26 @@ class BottomCustom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 52,
       width: width ?? (isExpand == true ? double.infinity : 361),
-      child: Stack(
-        children: [
-          Align(
-            alignment: const Alignment(0, 0.7),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(borderRadius),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color.fromARGB(255, 116, 146, 170),
-                    offset: const Offset(0, 1),
-                    blurRadius: 50,
-                  ),
-                ],
-              ),
-              width: width ?? (isExpand == true ? double.infinity : 361),
-              height: 52,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                label,
-                style: TextStyle(
-                  fontFamily: 'Poppins',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColor.secondary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
-          Align(
-            child: Material(
-              color: AppColor.secondary,
-              borderRadius: BorderRadius.circular(borderRadius),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(borderRadius),
-                onTap: () => onTap(),
-                child: Container(
-                  width: width ?? (isExpand == true ? double.infinity : 361),
-                  height: 52,
-                  alignment: Alignment.center,
-                  child: Text(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontFamily: 'Poppins',
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          elevation: 5,
+          padding: const EdgeInsets.symmetric(vertical: 15),
+        ),
+        onPressed: () => onTap(),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            fontFamily: 'Poppins',
+            color: AppColor.primary,
           ),
-        ],
+        ),
       ),
     );
   }
