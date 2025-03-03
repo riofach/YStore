@@ -23,7 +23,7 @@ class ManageRoleScreen extends StatefulWidget {
 class _ManageRoleScreenState extends State<ManageRoleScreen> {
   final AuthService _authService = AuthService();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  int _currentIndex = 1;
+  // int _currentIndex = 1;
   String _searchQuery = '';
 
   // Fungsi untuk mengubah status user
@@ -43,55 +43,55 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
     }
   }
 
-  void _onBottomNavigationTapped(int index) {
-    if (_currentIndex == index) return;
+  // void _onBottomNavigationTapped(int index) {
+  //   if (_currentIndex == index) return;
 
-    setState(() {
-      _currentIndex = index;
-    });
+  //   setState(() {
+  //     _currentIndex = index;
+  //   });
 
-    switch (index) {
-      case 0:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => DashboardScreen(role: widget.role)),
-          (route) => false,
-        );
-        break;
-      case 1:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ManageProductScreen(role: widget.role)),
-          (route) => false,
-        );
-        break;
-      case 2:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => ManageSalesScreen()),
-          (route) => false,
-        );
-        break;
-      case 3:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => ManagePurchasesScreen()),
-          (route) => false,
-        );
-        break;
-      case 4:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => NotificationsScreen()),
-          (route) => false,
-        );
-        break;
-      case 5:
-        break;
-    }
-  }
+  //   switch (index) {
+  //     case 0:
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => DashboardScreen(role: widget.role)),
+  //         (route) => false,
+  //       );
+  //       break;
+  //     case 1:
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => ManageProductScreen(role: widget.role)),
+  //         (route) => false,
+  //       );
+  //       break;
+  //     case 2:
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => ManageSalesScreen()),
+  //         (route) => false,
+  //       );
+  //       break;
+  //     case 3:
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => ManagePurchasesScreen()),
+  //         (route) => false,
+  //       );
+  //       break;
+  //     case 4:
+  //       Navigator.pushAndRemoveUntil(
+  //         context,
+  //         MaterialPageRoute(builder: (context) => NotificationsScreen()),
+  //         (route) => false,
+  //       );
+  //       break;
+  //     case 5:
+  //       break;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -219,11 +219,6 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
             ),
           ],
         ),
-      ),
-      bottomNavigationBar: CustomBottomNavigation(
-        role: widget.role,
-        currentIndex: _currentIndex,
-        onTap: _onBottomNavigationTapped,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
