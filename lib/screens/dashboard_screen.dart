@@ -9,10 +9,10 @@ import '../services/auth_service.dart';
 import 'login.dart';
 
 class DashboardScreen extends StatefulWidget {
-  final String role;
+  final String userId;
   final AuthService _authService = AuthService();
 
-  DashboardScreen({required this.role});
+  DashboardScreen({required this.userId});
 
   @override
   _DashboardScreenState createState() => _DashboardScreenState();
@@ -24,6 +24,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
   List<Color> colors = [];
   double totalRevenue = 0.0;
   double totalExpenses = 0.0;
+  String username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUsername();
+  }
+
+  Future<void> _fetchUsername() async {
+    try {
+      DocumentSnapshot userDoc =
+          await _firestore.collection('users').doc(widget.userId).get();
+      setState(() {
+        username = userDoc['username'] ?? 'User';
+      });
+    } catch (e) {
+      setState(() {
+        username = 'User';
+      });
+    }
+  }
 
   Stream<Map<String, double>> _fetchSalesData() {
     DateTime now = DateTime.now();
@@ -52,7 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }).map((tempData) {
       List<MapEntry<String, double>> sortedEntries = tempData.entries.toList()
         ..sort((a, b) => b.value.compareTo(a.value));
-      return Map.fromEntries(sortedEntries.take(10));
+      return Map.fromEntries(sortedEntries.take(5)); // Display top 5 products
     });
   }
 
@@ -85,10 +106,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('Role saat build: ${widget.role}');
+    print('Role saat build: ${widget.userId}');
     return Scaffold(
       appBar: AppBar(
-        title: Text('Dashboard YStore'),
+        backgroundColor: AppColor.bg,
         actions: [
           IconButton(
             icon: Icon(Icons.logout),
@@ -102,88 +123,145 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
+      backgroundColor: AppColor.bg,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Selamat datang, Anda login sebagai ${widget.role}'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Dashboard',
+                    style: TextStyle(
+                      fontFamily: 'Poppins',
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: AppColor.primary,
+                    ),
+                  ),
+                  Image.asset(
+                    "assets/images/logo.png",
+                    width: 57,
+                  ),
+                ],
+              ),
               SizedBox(height: 20),
-              Text('Penjualan Produk Terlaris Bulan Ini',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              SizedBox(height: 10),
-              StreamBuilder<Map<String, double>>(
-                stream: _fetchSalesData(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else {
-                    Map<String, double> salesData = snapshot.data ?? {};
-                    if (salesData.isNotEmpty) {
-                      colors = List.generate(
-                          salesData.length, (index) => generateRandomColor());
-                    }
+              Card(
+                color: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Selamat datang, $username',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          letterSpacing: 0.2,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Text(
+                        '5 Produk Terlaris Bulan Ini',
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      StreamBuilder<Map<String, double>>(
+                        stream: _fetchSalesData(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text('Error: ${snapshot.error}'));
+                          } else {
+                            Map<String, double> salesData = snapshot.data ?? {};
+                            if (salesData.isNotEmpty) {
+                              colors = List.generate(salesData.length,
+                                  (index) => generateRandomColor());
+                            }
 
-                    return salesData.isEmpty
-                        ? Text('Tidak ada data penjualan bulan ini')
-                        : Column(
-                            children: [
-                              SizedBox(
-                                height: 300, // Set fixed height for pie chart
-                                child: PieChart(
-                                  PieChartData(
-                                    sections: salesData.entries.map((entry) {
-                                      int index = salesData.keys
-                                          .toList()
-                                          .indexOf(entry.key);
-                                      return PieChartSectionData(
-                                        value: entry.value,
-                                        color: colors[index],
-                                      );
-                                    }).toList(),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: 20),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: salesData.entries.map((entry) {
-                                  int index = salesData.keys
-                                      .toList()
-                                      .indexOf(entry.key);
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: 8.0),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          padding: EdgeInsets.all(10),
-                                          decoration: BoxDecoration(
-                                            color: colors[index],
-                                            borderRadius:
-                                                BorderRadius.circular(5),
+                            return salesData.isEmpty
+                                ? Text('Tidak ada data penjualan bulan ini')
+                                : Column(
+                                    children: [
+                                      SizedBox(
+                                        height:
+                                            300, // Set fixed height for pie chart
+                                        child: PieChart(
+                                          PieChartData(
+                                            sections:
+                                                salesData.entries.map((entry) {
+                                              int index = salesData.keys
+                                                  .toList()
+                                                  .indexOf(entry.key);
+                                              return PieChartSectionData(
+                                                value: entry.value,
+                                                color: colors[index],
+                                              );
+                                            }).toList(),
                                           ),
                                         ),
-                                        SizedBox(width: 10),
-                                        Expanded(
-                                          child: Text(
-                                            '${entry.key}: ${entry.value}',
-                                            style:
-                                                TextStyle(color: Colors.black),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                      SizedBox(height: 20),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children:
+                                            salesData.entries.map((entry) {
+                                          int index = salesData.keys
+                                              .toList()
+                                              .indexOf(entry.key);
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 8.0),
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.all(10),
+                                                  decoration: BoxDecoration(
+                                                    color: colors[index],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            5),
+                                                  ),
+                                                ),
+                                                SizedBox(width: 10),
+                                                Expanded(
+                                                  child: Text(
+                                                    '${entry.key}: ${entry.value}',
+                                                    style: TextStyle(
+                                                        color: Colors.black),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ],
                                   );
-                                }).toList(),
-                              ),
-                            ],
-                          );
-                  }
-                },
+                          }
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               StreamBuilder<double>(

@@ -53,17 +53,12 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
                   Text(
                     "Kelola User",
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 28,
                       fontFamily: 'Poppins',
                       fontWeight: FontWeight.w700,
                       color: AppColor.primary,
                     ),
                   ),
-                  Image.asset(
-                    'assets/images/logo.png',
-                    width: 57,
-                    height: 57,
-                  )
                 ],
               ),
             ),

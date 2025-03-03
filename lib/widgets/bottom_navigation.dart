@@ -9,12 +9,14 @@ import 'package:ystore/screens/notifications_screen.dart';
 
 class CustomBottomNavBar extends StatefulWidget {
   final String role;
+  final String userId;
   final int selectedIndex;
   final Function(int) onItemTapped;
 
   const CustomBottomNavBar({
     super.key,
     required this.role,
+    required this.userId,
     required this.selectedIndex,
     required this.onItemTapped,
   });
@@ -43,20 +45,13 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     Icons.notifications_none,
   ];
 
-  // int selectedIndex =
-  //     0; //membaca item yang dipilih oleh pengguna dari CustomBottomNavBar
-
-  // void onItemTapped(int index) {
-  //   selectedIndex = index;
-  // }
-
   Widget _getBody(int index) {
     if (widget.role == 'superAdmin')
     // login sebagai super admin
     {
       switch (index) {
         case 0:
-          return DashboardScreen(role: widget.role);
+          return DashboardScreen(userId: widget.userId);
         case 1:
           return ManageRoleScreen(role: widget.role);
         case 2:
@@ -68,13 +63,13 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         case 5:
           return NotificationsScreen();
         default:
-          return DashboardScreen(role: widget.role);
+          return DashboardScreen(userId: widget.userId);
       }
     } else {
       // akses untuk non super admin
       switch (index) {
         case 0:
-          return DashboardScreen(role: widget.role);
+          return DashboardScreen(userId: widget.userId);
         case 1:
           return ManageProductScreen(role: widget.role);
         case 2:
@@ -84,7 +79,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         case 4:
           return NotificationsScreen();
         default:
-          return DashboardScreen(role: widget.role);
+          return DashboardScreen(userId: widget.userId);
       }
     }
   }
@@ -154,8 +149,10 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
 class MainScreen extends StatefulWidget {
   final String role;
+  final String userId;
 
-  const MainScreen({Key? key, required this.role}) : super(key: key);
+  const MainScreen({Key? key, required this.role, required this.userId})
+      : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -174,6 +171,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return CustomBottomNavBar(
       role: widget.role,
+      userId: widget.userId,
       selectedIndex: _selectedIndex,
       onItemTapped: _onItemTapped,
     );

@@ -7,7 +7,6 @@ import 'package:ystore/config/app_color.dart';
 import 'package:ystore/widgets/bottom_custom.dart';
 import 'package:ystore/widgets/bottom_navigation.dart';
 import '../services/auth_service.dart';
-// import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -110,6 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
           MaterialPageRoute(
             builder: (context) => MainScreen(
               role: userData['role'],
+              userId: userCredential.user?.uid ?? '',
             ),
           ),
         );

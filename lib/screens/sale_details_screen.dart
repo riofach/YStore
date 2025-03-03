@@ -59,7 +59,10 @@ class SaleDetailsScreen extends StatelessWidget {
     final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: AppColor.bg,
+      ),
+      backgroundColor: AppColor.bg,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FutureBuilder<DocumentSnapshot>(

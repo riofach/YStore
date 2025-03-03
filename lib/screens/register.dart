@@ -17,7 +17,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final AuthService _authService = AuthService();
 
   // Daftar pilihan role
-  final List<String> _roles = ['admin', 'kasir'];
+  final List<String> _roles = ['admin', 'kasir', 'superAdmin'];
   String? _selectedRole; // Role default
 
   // Daftar pilihan status
