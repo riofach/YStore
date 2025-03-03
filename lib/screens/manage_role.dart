@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ystore/config/app_color.dart';
-import 'package:ystore/screens/dashboard_screen.dart';
-import 'package:ystore/screens/manage_product.dart';
-import 'package:ystore/screens/manage_purchases.dart';
-import 'package:ystore/screens/manage_sales.dart';
-import 'package:ystore/screens/notifications_screen.dart';
-import 'package:ystore/widgets/bottom_navigation.dart';
 import '../services/auth_service.dart';
-import 'login.dart';
 import 'register.dart'; // Untuk navigasi setelah logout
 
 class ManageRoleScreen extends StatefulWidget {

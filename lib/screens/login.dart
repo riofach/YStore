@@ -150,10 +150,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      AppAssets.logo,
-                      width: 118,
-                      fit: BoxFit.fitWidth,
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColor.secondary.withOpacity(0.3),
+                            blurRadius: 15,
+                            spreadRadius: 2,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Image.asset(
+                        AppAssets.logo,
+                        width: 118,
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                     const SizedBox(
                       height: 40,
@@ -170,6 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .copyWith(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 24,
+                                  color: AppColor.primary,
                                 ),
                           ),
                           Text(
