@@ -5,8 +5,9 @@ import 'package:lottie/lottie.dart';
 import 'package:ystore/config/app_assets.dart';
 import 'package:ystore/config/app_color.dart';
 import 'package:ystore/widgets/bottom_custom.dart';
+import 'package:ystore/widgets/bottom_navigation.dart';
 import '../services/auth_service.dart';
-import 'dashboard_screen.dart';
+// import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -52,17 +53,11 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-    await Future.wait([
-      Future.delayed(const Duration(seconds: 2)),
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc('userCredential.user?.uid')
-          .get(),
-    ]);
-
-    // await Future.delayed(const Duration(seconds: 3));
 
     try {
+      // tunda ke next screen selama 2 detik
+      await Future.delayed(const Duration(seconds: 2));
+
       // Login dengan Firebase Authentication
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -93,6 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Verifikasi status user
       if (userData['status'] == 'inactive') {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Akun Anda tidak aktif!")),
         );
@@ -100,24 +96,38 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if (isPasswordValid) {
+        // ignore: use_build_context_synchronously
+        if (context.mounted)
+          Navigator.of(context)
+              .pop(); // tutup dialog screen jika login berhasil
         print(
             'Role sebelum navigasi: ${userData['role']}'); // Log role sebelum navigasi
+
         // Berhasil login, redirect ke dashboard
-        if (context.mounted) {
-          Navigator.of(context).pop();
-        }
         Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(
-            builder: (context) => DashboardScreen(role: userData['role']),
+            builder: (context) => MainScreen(
+              role: userData['role'],
+            ),
           ),
         );
       } else {
+        // ignore: use_build_context_synchronously
+        if (context.mounted)
+          Navigator.of(context)
+              .pop(); // tutup loading screen jika password salah
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Password salah!")),
         );
       }
     } on FirebaseAuthException catch (e) {
+      // ignore: use_build_context_synchronously
+      if (context.mounted)
+        Navigator.of(context).pop(); // tutup loading screen jika login gagal
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Login gagal: ${e.message}")),
       );
