@@ -248,7 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 buttonStyleData: ButtonStyleData(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: AppColor.grey),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   height: 56,
@@ -257,7 +257,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 dropdownStyleData: DropdownStyleData(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
+                    color: AppColor.white,
                   ),
                   padding: EdgeInsets.symmetric(vertical: 6),
                   maxHeight: 300,
@@ -289,7 +289,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 buttonStyleData: ButtonStyleData(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey),
+                    border: Border.all(color: AppColor.grey),
                   ),
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   height: 56,
@@ -298,7 +298,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 dropdownStyleData: DropdownStyleData(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
+                    color: AppColor.white,
                   ),
                   padding: EdgeInsets.symmetric(vertical: 6),
                   maxHeight: 300,
