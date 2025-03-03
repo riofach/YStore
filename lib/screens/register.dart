@@ -18,11 +18,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   // Daftar pilihan role
   final List<String> _roles = ['admin', 'kasir'];
-  String _selectedRole = 'admin'; // Role default
+  String? _selectedRole; // Role default
 
   // Daftar pilihan status
   final List<String> _statuses = ['active', 'inactive'];
-  String _selectedStatus = 'active'; // Status default
+  String? _selectedStatus; // Status default
 
   Future<void> _register() async {
     String email = _emailController.text.trim();
@@ -242,7 +242,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 }).toList(),
                 onChanged: (String? newValue) {
                   setState(() {
-                    _selectedStatus = newValue!;
+                    _selectedRole = newValue!;
                   });
                 },
                 buttonStyleData: ButtonStyleData(
