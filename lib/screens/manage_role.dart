@@ -36,56 +36,6 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
     }
   }
 
-  // void _onBottomNavigationTapped(int index) {
-  //   if (_currentIndex == index) return;
-
-  //   setState(() {
-  //     _currentIndex = index;
-  //   });
-
-  //   switch (index) {
-  //     case 0:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => DashboardScreen(role: widget.role)),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 1:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => ManageProductScreen(role: widget.role)),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 2:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => ManageSalesScreen()),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 3:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => ManagePurchasesScreen()),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 4:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => NotificationsScreen()),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 5:
-  //       break;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
