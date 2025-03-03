@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ystore/config/app_color.dart';
-import 'package:ystore/screens/dashboard_screen.dart';
-import 'package:ystore/screens/manage_product.dart';
-import 'package:ystore/screens/manage_purchases.dart';
-import 'package:ystore/screens/manage_sales.dart';
-import 'package:ystore/screens/notifications_screen.dart';
-import 'package:ystore/widgets/bottom_navigation.dart';
 import '../services/auth_service.dart';
 import 'login.dart';
 import 'register.dart'; // Untuk navigasi setelah logout
@@ -42,56 +36,6 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
       );
     }
   }
-
-  // void _onBottomNavigationTapped(int index) {
-  //   if (_currentIndex == index) return;
-
-  //   setState(() {
-  //     _currentIndex = index;
-  //   });
-
-  //   switch (index) {
-  //     case 0:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => DashboardScreen(role: widget.role)),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 1:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => ManageProductScreen(role: widget.role)),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 2:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => ManageSalesScreen()),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 3:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => ManagePurchasesScreen()),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 4:
-  //       Navigator.pushAndRemoveUntil(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => NotificationsScreen()),
-  //         (route) => false,
-  //       );
-  //       break;
-  //     case 5:
-  //       break;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
