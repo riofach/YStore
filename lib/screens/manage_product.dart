@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ystore/config/app_assets.dart';
 import 'package:ystore/config/app_color.dart';
 import 'package:ystore/screens/dashboard_screen.dart';
 import 'package:ystore/screens/manage_purchases.dart';
@@ -21,7 +20,7 @@ class ManageProductScreen extends StatefulWidget {
 
 class _ManageProductScreenState extends State<ManageProductScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   String _searchQuery = '';
 
   Future<void> _deleteProduct(String productId, String productName) async {
@@ -76,7 +75,12 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
   }
 
   void _onBottomNavigationTapped(int index) {
-    print('Navigasi ke: $index dengan role: ${widget.role}');
+    if (_currentIndex == index) return;
+
+    setState(() {
+      _currentIndex = index;
+    });
+
     switch (index) {
       case 0:
         Navigator.pushAndRemoveUntil(
@@ -87,12 +91,6 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
         );
         break;
       case 1:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ManageProductScreen(role: widget.role)),
-          (route) => false,
-        );
         break;
       case 2:
         Navigator.pushAndRemoveUntil(
@@ -116,15 +114,14 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
         );
         break;
       case 5:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ManageRoleScreen(role: widget.role)),
-          (route) => false,
-        );
-        break;
-      // Add more cases for other icons
-      default:
+        if (widget.role == 'superAdmin') {
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ManageRoleScreen(role: widget.role)),
+            (route) => false,
+          );
+        }
         break;
     }
   }
@@ -212,64 +209,44 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColor.white,
-                              borderRadius: BorderRadius.circular(20),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  spreadRadius: 2,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
+                          child: Card(
+                            color: AppColor.white, // Warna lebih soft
+                            elevation: 1, // Elevasi lebih rendah
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  15), // Membuat sudut lebih membulat
                             ),
                             child: ListTile(
                               contentPadding: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
+                                  horizontal: 16, vertical: 10),
                               title: Text(
                                 data['name'] ?? 'Tidak ada nama',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: AppColor.primary,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: TextStyle(fontWeight: FontWeight.bold),
                               ),
                               subtitle: Text(
-                                "Hb: ${data['buyPrice'] ?? 'kosong'}, Hj: ${data['sellPrice'] ?? 'kosong'}, Stok: ${data['stock'] ?? 0}",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: AppColor.grey,
-                                  fontFamily: 'Poppins',
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                "Hb: ${data['buyPrice']}, Hj: ${data['sellPrice']}, Stok: ${data['stock']}",
                               ),
-                              trailing: widget.role != 'kasir'
-                                  ? Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        IconButton(
-                                          icon: Icon(Icons.edit,
-                                              color: AppColor.orange),
-                                          onPressed: () =>
-                                              _showEditProductDialog(
-                                                  document.id),
-                                        ),
-                                        SizedBox(width: 8), // Jarak antara ikon
-                                        IconButton(
-                                          icon: Icon(Icons.delete,
-                                              color: AppColor.maroon),
-                                          onPressed: () =>
-                                              _showDeleteConfirmationDialog(
-                                                  document.id,
-                                                  data['name'] ??
-                                                      'Tidak ada nama'),
-                                        ),
-                                      ],
-                                    )
-                                  : null,
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.edit,
+                                        color:
+                                            AppColor.orange), // Warna ikon edit
+                                    onPressed: () {
+                                      _showEditProductDialog(document.id);
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete,
+                                        color: AppColor.maroon), // Ikon hapus
+                                    onPressed: () {
+                                      _showDeleteConfirmationDialog(
+                                          document.id, data['name']);
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -283,43 +260,29 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
         ),
       ),
       bottomNavigationBar: CustomBottomNavigation(
+        role: widget.role,
         currentIndex: _currentIndex,
         onTap: _onBottomNavigationTapped,
-        role: widget.role,
       ),
-      floatingActionButton: widget.role != 'kasir'
-          ? Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: AppColor.secondary,
-                borderRadius: BorderRadius.circular(50),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color.fromARGB(31, 0, 0, 0),
-                    blurRadius: 2,
-                    spreadRadius: 2,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddProductScreen()),
-                  );
-                },
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 30,
-                ),
-              ),
-            )
-          : null,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigasi ke halaman tambah user (register.dart)
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddProductScreen()),
+          );
+        },
+        backgroundColor: AppColor.secondary,
+        foregroundColor: AppColor.white,
+        elevation: 8.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Icon(
+          Icons.add,
+          size: 35,
+        ),
+      ),
     );
   }
 }

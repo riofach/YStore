@@ -23,7 +23,7 @@ class ManageRoleScreen extends StatefulWidget {
 class _ManageRoleScreenState extends State<ManageRoleScreen> {
   final AuthService _authService = AuthService();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  int _currentIndex = 0;
+  int _currentIndex = 1;
   String _searchQuery = '';
 
   // Fungsi untuk mengubah status user
@@ -44,7 +44,12 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
   }
 
   void _onBottomNavigationTapped(int index) {
-    print('Navigasi ke: $index dengan role: ${widget.role}');
+    if (_currentIndex == index) return;
+
+    setState(() {
+      _currentIndex = index;
+    });
+
     switch (index) {
       case 0:
         Navigator.pushAndRemoveUntil(
@@ -84,15 +89,6 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
         );
         break;
       case 5:
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-              builder: (context) => ManageRoleScreen(role: widget.role)),
-          (route) => false,
-        );
-        break;
-      // Add more cases for other icons
-      default:
         break;
     }
   }
@@ -225,9 +221,9 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
         ),
       ),
       bottomNavigationBar: CustomBottomNavigation(
+        role: widget.role,
         currentIndex: _currentIndex,
         onTap: _onBottomNavigationTapped,
-        role: widget.role,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
