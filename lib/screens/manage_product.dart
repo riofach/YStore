@@ -83,38 +83,43 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) => DashboardScreen(role: widget.role)),
+          (route) => false,
         );
         break;
       case 1:
         break;
       case 2:
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => ManageSalesScreen()),
+          (route) => false,
         );
         break;
       case 3:
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => ManagePurchasesScreen()),
+          (route) => false,
         );
         break;
       case 4:
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => NotificationsScreen()),
+          (route) => false,
         );
         break;
       case 5:
         if (widget.role == 'superAdmin') {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
                 builder: (context) => ManageRoleScreen(role: widget.role)),
+            (route) => false,
           );
         }
         break;
@@ -205,7 +210,7 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6.0),
                           child: Card(
-                            color: Colors.white, // Warna lebih soft
+                            color: AppColor.white, // Warna lebih soft
                             elevation: 1, // Elevasi lebih rendah
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(
@@ -227,14 +232,14 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
                                   IconButton(
                                     icon: Icon(Icons.edit,
                                         color:
-                                            Colors.orange), // Warna ikon edit
+                                            AppColor.orange), // Warna ikon edit
                                     onPressed: () {
                                       _showEditProductDialog(document.id);
                                     },
                                   ),
                                   IconButton(
                                     icon: Icon(Icons.delete,
-                                        color: Colors.red), // Ikon hapus
+                                        color: AppColor.maroon), // Ikon hapus
                                     onPressed: () {
                                       _showDeleteConfirmationDialog(
                                           document.id, data['name']);

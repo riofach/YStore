@@ -52,40 +52,43 @@ class _ManageRoleScreenState extends State<ManageRoleScreen> {
 
     switch (index) {
       case 0:
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
               builder: (context) => DashboardScreen(role: widget.role)),
+          (route) => false,
         );
         break;
       case 1:
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ManageProductScreen(role: widget.role)),
+          (route) => false,
+        );
         break;
       case 2:
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => ManageSalesScreen()),
+          (route) => false,
         );
         break;
       case 3:
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => ManagePurchasesScreen()),
+          (route) => false,
         );
         break;
       case 4:
-        Navigator.pushReplacement(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => NotificationsScreen()),
+          (route) => false,
         );
         break;
       case 5:
-        if (widget.role == 'superAdmin') {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ManageRoleScreen(role: widget.role)),
-          );
-        }
         break;
     }
   }

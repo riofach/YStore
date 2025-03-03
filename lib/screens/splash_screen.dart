@@ -47,7 +47,7 @@ class SplashScreen extends StatelessWidget {
             const Text(
               "Yudi Store",
               style: TextStyle(
-                color: Colors.white,
+                color: AppColor.white,
                 fontSize: 20,
                 fontFamily: "Poppins",
                 fontWeight: FontWeight.w600,
@@ -58,7 +58,7 @@ class SplashScreen extends StatelessWidget {
               height: 20,
             ),
             const SpinKitThreeBounce(
-              color: Colors.white,
+              color: AppColor.white,
               size: 24.0,
               duration: Duration(milliseconds: 1500),
             )
