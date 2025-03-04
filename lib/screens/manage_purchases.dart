@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:ystore/config/app_color.dart';
 import '../services/add_purchase.dart';
 import 'purchase_details_screen.dart';
 
@@ -12,8 +13,8 @@ class ManagePurchasesScreen extends StatefulWidget {
 
 class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  TextEditingController _startDateController = TextEditingController();
-  TextEditingController _endDateController = TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
   DateTime? startDate;
   DateTime? endDate;
 
@@ -92,174 +93,256 @@ class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting(
-        'id_ID', null); // date formatting for Indonesian locale
+    initializeDateFormatting('id_ID', null);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Kelola Pembelian'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: _clearFilters,
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _startDateController,
-                    decoration: InputDecoration(labelText: 'Tanggal Mulai'),
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
-                        _startDateController.text =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        setState(() {
-                          startDate = pickedDate;
-                        });
-                      }
-                    },
-                  ),
+      backgroundColor: AppColor.bg,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Kelola Pembelian',
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primary),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.filter_list),
+                      onPressed: () {
+                        _clearFilters();
+                      },
+                    ),
+                  ],
                 ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: TextFormField(
-                    controller: _endDateController,
-                    decoration: InputDecoration(labelText: 'Tanggal Akhir'),
-                    onTap: () async {
-                      if (startDate == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content:
-                                  Text("Pilih tanggal mulai terlebih dahulu")),
-                        );
-                        return;
-                      }
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: startDate!,
-                        firstDate: startDate!,
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
-                        _endDateController.text =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        setState(() {
-                          endDate = pickedDate;
-                        });
-                      }
-                    },
-                  ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _startDateController,
+                        decoration: InputDecoration(
+                          labelText: 'Tanggal Mulai',
+                          border: UnderlineInputBorder(),
+                        ),
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (pickedDate != null) {
+                            _startDateController.text =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                            setState(() {
+                              startDate = pickedDate;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _endDateController,
+                        decoration: InputDecoration(
+                          labelText: 'Tanggal Akhir',
+                          border: UnderlineInputBorder(),
+                        ),
+                        onTap: () async {
+                          if (startDate == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      "Pilih tanggal mulai terlebih dahulu")),
+                            );
+                            return;
+                          }
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: startDate!,
+                            firstDate: startDate!,
+                            lastDate: DateTime(2100),
+                          );
+                          if (pickedDate != null) {
+                            _endDateController.text =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                            setState(() {
+                              endDate = pickedDate;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('purchases').snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return Center(
-                      child: Text("Terjadi error: ${snapshot.error}"));
-                }
-
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text("Tidak ada data pembelian."));
-                }
-
-                List<DocumentSnapshot> filteredDocs =
-                    snapshot.data!.docs.where((doc) {
-                  DateTime purchaseDate =
-                      (doc.data() as Map<String, dynamic>)['purchaseDate']
-                          .toDate();
-                  if (startDate != null && endDate != null) {
-                    return purchaseDate.isAfter(startDate!) &&
-                        purchaseDate.isBefore(endDate!.add(Duration(days: 1)));
-                  } else if (startDate != null) {
-                    return purchaseDate.isAfter(startDate!);
-                  } else if (endDate != null) {
-                    return purchaseDate
-                        .isBefore(endDate!.add(Duration(days: 1)));
-                  } else {
-                    return true;
-                  }
-                }).toList();
-
-                return ListView.builder(
-                  itemCount: filteredDocs.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot purchaseDoc = filteredDocs[index];
-                    Map<String, dynamic> purchaseData =
-                        purchaseDoc.data() as Map<String, dynamic>;
-
-                    List<String> productNames = [];
-                    int totalQuantity = 0;
-
-                    for (var product in purchaseData['products']) {
-                      productNames
-                          .add("${product['name']} (${product['quantity']})");
-                      totalQuantity += (product['quantity'] as num).toInt();
+              ),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _firestore.collection('purchases').snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
                     }
 
-                    String formattedDate = DateFormat('EEEE, d MMMM y', 'id_ID')
-                        .format(purchaseData['purchaseDate'].toDate());
-
-                    String displayedProducts = productNames.take(2).join(', ');
-                    if (productNames.length > 2) {
-                      displayedProducts += ', ......';
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: Text("Terjadi error: ${snapshot.error}"));
                     }
 
-                    return FutureBuilder<String>(
-                      future: _fetchUserName(purchaseData['purchasedBy']),
-                      builder: (context, userSnapshot) {
-                        String purchasedBy = userSnapshot.data ?? 'Unknown';
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return Center(child: Text("Tidak ada data pembelian."));
+                    }
 
-                        return ListTile(
-                          title: Text("Produk: $displayedProducts"),
-                          subtitle: Text(
-                              "Total: ${purchaseData['totalAmount']}, Tgl: $formattedDate, Dibeli: $purchasedBy"),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () => _showDeleteConfirmationDialog(
-                                    purchaseDoc.id),
-                              ),
-                              IconButton(
-                                icon: Icon(Icons.visibility),
-                                onPressed: () =>
-                                    _showPurchaseDetails(purchaseDoc.id),
-                              ),
-                            ],
+                    List<DocumentSnapshot> filteredDocs =
+                        snapshot.data!.docs.where((doc) {
+                      DateTime purchaseDate =
+                          (doc.data() as Map<String, dynamic>)['purchaseDate']
+                              .toDate();
+                      if (startDate != null && endDate != null) {
+                        return purchaseDate.isAfter(startDate!) &&
+                            purchaseDate
+                                .isBefore(endDate!.add(Duration(days: 1)));
+                      } else if (startDate != null) {
+                        return purchaseDate.isAfter(startDate!);
+                      } else if (endDate != null) {
+                        return purchaseDate
+                            .isBefore(endDate!.add(Duration(days: 1)));
+                      } else {
+                        return true;
+                      }
+                    }).toList();
+
+                    return ListView.builder(
+                      itemCount: filteredDocs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot purchaseDoc = filteredDocs[index];
+                        Map<String, dynamic> purchaseData =
+                            purchaseDoc.data() as Map<String, dynamic>;
+
+                        List<String> productNames = [];
+                        int totalQuantity = 0;
+
+                        for (var product in purchaseData['products']) {
+                          productNames.add(
+                              "${product['name']} (${product['quantity']})");
+                          totalQuantity += (product['quantity'] as num).toInt();
+                        }
+
+                        String formattedDate =
+                            DateFormat('EEEE, d MMMM y', 'id_ID')
+                                .format(purchaseData['purchaseDate'].toDate());
+
+                        String displayedProducts =
+                            productNames.take(2).join(', ');
+                        if (productNames.length > 2) {
+                          displayedProducts += ', ......';
+                        }
+
+                        return Dismissible(
+                          key: Key(purchaseDoc.id),
+                          direction: DismissDirection.endToStart,
+                          confirmDismiss: (direction) async {
+                            return await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Konfirmasi Hapus"),
+                                  content: Text(
+                                      "Apakah Anda yakin ingin menghapus pembelian ini?"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text("Batal"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text("Hapus"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(true);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          onDismissed: (direction) {
+                            _deletePurchase(purchaseDoc.id);
+                          },
+                          background: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            alignment: Alignment.centerRight,
+                            color: AppColor.maroon,
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: FutureBuilder<String>(
+                            future: _fetchUserName(purchaseData['purchasedBy']),
+                            builder: (context, userSnapshot) {
+                              String purchasedBy =
+                                  userSnapshot.data ?? 'Unknown';
+
+                              return Card(
+                                elevation: 2,
+                                color: AppColor.white,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: ListTile(
+                                  contentPadding: EdgeInsets.all(16),
+                                  title: Text(
+                                    displayedProducts,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(
+                                      "Total: ${purchaseData['totalAmount']}, Tgl: $formattedDate, Dibeli: $purchasedBy"),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.visibility,
+                                            color: AppColor.orange),
+                                        onPressed: () {
+                                          _showPurchaseDetails(purchaseDoc.id);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         );
                       },
                     );
                   },
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -269,7 +352,16 @@ class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
             MaterialPageRoute(builder: (context) => AddPurchaseScreen()),
           );
         },
-        child: Icon(Icons.add),
+        backgroundColor: AppColor.secondary,
+        foregroundColor: AppColor.white,
+        elevation: 8.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Icon(
+          Icons.add,
+          size: 35,
+        ),
       ),
     );
   }
