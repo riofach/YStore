@@ -254,42 +254,86 @@ class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
                           displayedProducts += ', ......';
                         }
 
-                        return FutureBuilder<String>(
-                          future: _fetchUserName(purchaseData['purchasedBy']),
-                          builder: (context, userSnapshot) {
-                            String purchasedBy = userSnapshot.data ?? 'Unknown';
-
-                            return Card(
-                              elevation: 2,
-                              color: AppColor.white,
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: ListTile(
-                                contentPadding: EdgeInsets.all(16),
-                                title: Text(
-                                  displayedProducts,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                subtitle: Text(
-                                    "Total: ${purchaseData['totalAmount']}, Tgl: $formattedDate, Dibeli: $purchasedBy"),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      icon: Icon(Icons.visibility,
-                                          color: AppColor.orange),
+                        return Dismissible(
+                          key: Key(purchaseDoc.id),
+                          direction: DismissDirection.endToStart,
+                          confirmDismiss: (direction) async {
+                            return await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Konfirmasi Hapus"),
+                                  content: Text(
+                                      "Apakah Anda yakin ingin menghapus pembelian ini?"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text("Batal"),
                                       onPressed: () {
-                                        _showPurchaseDetails(purchaseDoc.id);
+                                        Navigator.of(context).pop(false);
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text("Hapus"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(true);
                                       },
                                     ),
                                   ],
-                                ),
-                              ),
+                                );
+                              },
                             );
                           },
+                          onDismissed: (direction) {
+                            _deletePurchase(purchaseDoc.id);
+                          },
+                          background: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            alignment: Alignment.centerRight,
+                            color: AppColor.maroon,
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: FutureBuilder<String>(
+                            future: _fetchUserName(purchaseData['purchasedBy']),
+                            builder: (context, userSnapshot) {
+                              String purchasedBy =
+                                  userSnapshot.data ?? 'Unknown';
+
+                              return Card(
+                                elevation: 2,
+                                color: AppColor.white,
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 8),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: ListTile(
+                                  contentPadding: EdgeInsets.all(16),
+                                  title: Text(
+                                    displayedProducts,
+                                    style:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                  ),
+                                  subtitle: Text(
+                                      "Total: ${purchaseData['totalAmount']}, Tgl: $formattedDate, Dibeli: $purchasedBy"),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        icon: Icon(Icons.visibility,
+                                            color: AppColor.orange),
+                                        onPressed: () {
+                                          _showPurchaseDetails(purchaseDoc.id);
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         );
                       },
                     );

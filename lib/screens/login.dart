@@ -7,6 +7,7 @@ import 'package:ystore/config/app_color.dart';
 import 'package:ystore/widgets/bottom_custom.dart';
 import 'package:ystore/widgets/bottom_navigation.dart';
 import '../services/auth_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -18,6 +19,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final AuthService _authService = AuthService();
   bool _isPasswordVisible = false;
+
+  Future<void> _saveLoginStatus(String userId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', true);
+    await prefs.setString('userId', userId);
+  }
 
   Future<void> _login() async {
     String email = _emailController.text.trim();
@@ -101,6 +108,9 @@ class _LoginScreenState extends State<LoginScreen> {
               .pop(); // tutup dialog screen jika login berhasil
         print(
             'Role sebelum navigasi: ${userData['role']}'); // Log role sebelum navigasi
+
+        // Simpan status login
+        await _saveLoginStatus(userCredential.user?.uid ?? '');
 
         // Berhasil login, redirect ke dashboard
         Navigator.pushReplacement(

@@ -286,33 +286,75 @@ class _ManageSalesScreenState extends State<ManageSalesScreen> {
                           displayedProducts += ', ....';
                         }
 
-                        return Card(
-                          elevation: 2,
-                          color: AppColor.white,
-                          margin:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.all(16),
-                            title: Text(
-                              displayedProducts,
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                        return Dismissible(
+                          key: Key(saleDoc.id),
+                          direction: DismissDirection.endToStart,
+                          confirmDismiss: (direction) async {
+                            return await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Konfirmasi Hapus"),
+                                  content: Text(
+                                      "Apakah Anda yakin ingin menghapus penjualan ini?"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text("Batal"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text("Hapus"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(true);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          onDismissed: (direction) {
+                            _deleteSale(saleDoc.id);
+                          },
+                          background: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            alignment: Alignment.centerRight,
+                            color: AppColor.maroon,
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
                             ),
-                            subtitle:
-                                Text("Tgl: $formattedDate, Penjual: owner"),
-                            trailing: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.visibility,
-                                      color: AppColor.orange),
-                                  onPressed: () {
-                                    _showSaleDetails(saleDoc.id);
-                                  },
-                                ),
-                              ],
+                          ),
+                          child: Card(
+                            elevation: 2,
+                            color: AppColor.white,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.all(16),
+                              title: Text(
+                                displayedProducts,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle:
+                                  Text("Tgl: $formattedDate, Penjual: owner"),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.visibility,
+                                        color: AppColor.orange),
+                                    onPressed: () {
+                                      _showSaleDetails(saleDoc.id);
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         );
