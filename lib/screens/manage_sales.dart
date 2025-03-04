@@ -16,8 +16,8 @@ class _ManageSalesScreenState extends State<ManageSalesScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AuthService _authService = AuthService(); // AuthService instance
   String? _userRole;
-  TextEditingController _startDateController = TextEditingController();
-  TextEditingController _endDateController = TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
   DateTime? startDate;
   DateTime? endDate;
 
@@ -230,11 +230,36 @@ class _ManageSalesScreenState extends State<ManageSalesScreen> {
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _firestore.collection('sales').snapshots(),
                   builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: Text("Terjadi error: ${snapshot.error}"));
+                    }
+
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                       return Center(child: Text("Tidak ada data penjualan."));
                     }
 
-                    List<DocumentSnapshot> filteredDocs = snapshot.data!.docs;
+                    List<DocumentSnapshot> filteredDocs =
+                        snapshot.data!.docs.where((doc) {
+                      DateTime saleDate =
+                          (doc.data() as Map<String, dynamic>)['saleDate']
+                              .toDate();
+                      if (startDate != null && endDate != null) {
+                        return saleDate.isAfter(startDate!) &&
+                            saleDate.isBefore(endDate!.add(Duration(days: 1)));
+                      } else if (startDate != null) {
+                        return saleDate.isAfter(startDate!);
+                      } else if (endDate != null) {
+                        return saleDate
+                            .isBefore(endDate!.add(Duration(days: 1)));
+                      } else {
+                        return true;
+                      }
+                    }).toList();
 
                     return ListView.builder(
                       itemCount: filteredDocs.length,
@@ -285,13 +310,6 @@ class _ManageSalesScreenState extends State<ManageSalesScreen> {
                                       color: AppColor.orange),
                                   onPressed: () {
                                     _showSaleDetails(saleDoc.id);
-                                  },
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.delete,
-                                      color: AppColor.maroon),
-                                  onPressed: () {
-                                    _showDeleteConfirmationDialog(saleDoc.id);
                                   },
                                 ),
                               ],

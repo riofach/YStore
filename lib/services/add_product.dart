@@ -4,7 +4,7 @@ import 'package:ystore/config/app_color.dart';
 import 'package:ystore/widgets/bottom_custom.dart';
 
 class AddProductScreen extends StatefulWidget {
-  final String? productId; // Optional product ID for editing
+  final String? productId; 
 
   AddProductScreen({this.productId});
 
@@ -16,7 +16,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
-  String _selectedCategory = 'Gas'; // Default category
+  String _selectedCategory = 'Gas'; 
   final TextEditingController _stockController = TextEditingController();
   final TextEditingController _buyPriceController = TextEditingController();
   final TextEditingController _sellPriceController = TextEditingController();

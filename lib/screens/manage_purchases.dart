@@ -13,8 +13,8 @@ class ManagePurchasesScreen extends StatefulWidget {
 
 class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  TextEditingController _startDateController = TextEditingController();
-  TextEditingController _endDateController = TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
   DateTime? startDate;
   DateTime? endDate;
 
@@ -93,8 +93,7 @@ class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
   @override
   void initState() {
     super.initState();
-    initializeDateFormatting(
-        'id_ID', null); // date formatting for Indonesian locale
+    initializeDateFormatting('id_ID', null);
   }
 
   @override
@@ -197,11 +196,37 @@ class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
                 child: StreamBuilder<QuerySnapshot>(
                   stream: _firestore.collection('purchases').snapshots(),
                   builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: Text("Terjadi error: ${snapshot.error}"));
+                    }
+
                     if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
                       return Center(child: Text("Tidak ada data pembelian."));
                     }
 
-                    List<DocumentSnapshot> filteredDocs = snapshot.data!.docs;
+                    List<DocumentSnapshot> filteredDocs =
+                        snapshot.data!.docs.where((doc) {
+                      DateTime purchaseDate =
+                          (doc.data() as Map<String, dynamic>)['purchaseDate']
+                              .toDate();
+                      if (startDate != null && endDate != null) {
+                        return purchaseDate.isAfter(startDate!) &&
+                            purchaseDate
+                                .isBefore(endDate!.add(Duration(days: 1)));
+                      } else if (startDate != null) {
+                        return purchaseDate.isAfter(startDate!);
+                      } else if (endDate != null) {
+                        return purchaseDate
+                            .isBefore(endDate!.add(Duration(days: 1)));
+                      } else {
+                        return true;
+                      }
+                    }).toList();
 
                     return ListView.builder(
                       itemCount: filteredDocs.length,
@@ -258,14 +283,6 @@ class _ManagePurchasesScreenState extends State<ManagePurchasesScreen> {
                                           color: AppColor.orange),
                                       onPressed: () {
                                         _showPurchaseDetails(purchaseDoc.id);
-                                      },
-                                    ),
-                                    IconButton(
-                                      icon: Icon(Icons.delete,
-                                          color: AppColor.maroon),
-                                      onPressed: () {
-                                        _showDeleteConfirmationDialog(
-                                            purchaseDoc.id);
                                       },
                                     ),
                                   ],
