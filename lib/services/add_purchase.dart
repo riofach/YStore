@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:ystore/config/app_color.dart';
+import 'package:ystore/widgets/bottom_custom.dart';
 
 class AddPurchaseScreen extends StatefulWidget {
   @override
@@ -152,58 +154,131 @@ class _AddPurchaseScreenState extends State<AddPurchaseScreen> {
     );
 
     return Scaffold(
+      backgroundColor: AppColor.bg,
       appBar: AppBar(
-        title: Text('Tambah Pembelian'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: ListView.builder(
-                itemCount: _selectedProducts.length,
-                itemBuilder: (context, index) {
-                  Map<String, dynamic> product = _selectedProducts[index];
-                  return ListTile(
-                    title: Text(product['name']),
-                    subtitle: Text(
-                        "Jumlah: ${product['quantity']}, Total: ${(product['quantity'] as int) * (product['buyPrice'] as int)}"),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.remove_circle),
-                          onPressed: () {
-                            setState(() {
-                              _selectedProducts.removeAt(index);
-                            });
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.edit),
-                          onPressed: () {
-                            _showQuantityDialog(product['id']);
-                          },
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              ),
-            ),
-            Text("Total Belanja: $totalEstimatedCost"),
-            ElevatedButton(
-              onPressed: _addPurchase,
-              child: Text('Tambah Pembelian'),
-            ),
-          ],
+        backgroundColor: AppColor.bg,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+            size: 30,
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showProductSelectionDialog();
-        },
-        child: Icon(Icons.add),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Tambah Pembelian',
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 28),
+                  ),
+                  SizedBox(height: 22),
+                  Expanded(
+                    child: ListView.builder(
+                      itemCount: _selectedProducts.length,
+                      itemBuilder: (context, index) {
+                        Map<String, dynamic> product = _selectedProducts[index];
+                        return Card(
+                          elevation: 2,
+                          color: AppColor.white,
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 4),
+                              title: Text(
+                                product['name'],
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                  "Jumlah: ${product['quantity']}, Total: ${(product['quantity'] as int) * (product['buyPrice'] as int)}"),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.remove_circle,
+                                      color: AppColor.maroon,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _selectedProducts.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: AppColor.orange,
+                                    ),
+                                    onPressed: () {
+                                      _showQuantityDialog(product['id']);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Total Belanja: $totalEstimatedCost",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: AppColor.primary,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  BottomCustom(
+                    label: 'Tambah Pembelian',
+                    onTap: _addPurchase,
+                    isExpand: true,
+                  ),
+                  SizedBox(height: 20),
+                ],
+              ),
+              Positioned(
+                bottom: 80,
+                right: 16,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    _showProductSelectionDialog();
+                  },
+                  backgroundColor: AppColor.primary,
+                  foregroundColor: AppColor.white,
+                  elevation: 8.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Icon(
+                    Icons.add,
+                    size: 35,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

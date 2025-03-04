@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class AppColor {
-  static const primary = Color(0xff002C4B);
-  static const secondary = Color(0xff8FDCF8);
-  static const backgroundScaffold = Color(0xffF4F4F4);
-
-  static const grey = Color(0xffB9B9B9);
-
-  static const lightGrey = Color(0xffF2F3F7);
+  static const grey = Color(0xFFB9b9b9);
+  static const white = Color(0xFFffffff);
+  static const primary = Color(0xff002c4b);
+  static const secondary = Color(0xff8fdcf8);
+  static const orange = Color(0xfffb9154);
+  static const bg = Color(0xfff4f4f4);
+  static const maroon = Color(0xffb92727);
+  static const greyLight = Color(0xfff2f3f7);
+  static const navigation = Color(0xff484c52);
 }

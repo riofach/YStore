@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:ystore/screens/dashboard_screen.dart';
-import 'screens/login.dart';
+import 'package:ystore/screens/splash_screen.dart';
+// import 'screens/login.dart';
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -25,16 +25,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'YSTORE',
-      // theme: ThemeData(
-      //   visualDensity: VisualDensity.adaptivePlatformDensity,
-      // ),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
-      routes: {
-        '/login': (context) => LoginScreen(), // route login
-        '/dashboard': (context) =>
-            DashboardScreen(role: 'admin, kasir'), // route dashboard
-      },
+      home: SplashScreen(),
     );
   }
 }

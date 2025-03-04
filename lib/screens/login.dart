@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:lottie/lottie.dart';
 import 'package:ystore/config/app_assets.dart';
 import 'package:ystore/config/app_color.dart';
 import 'package:ystore/widgets/bottom_custom.dart';
+import 'package:ystore/widgets/bottom_navigation.dart';
 import '../services/auth_service.dart';
-import 'dashboard_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -29,7 +30,33 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    // Tampilan loading screen
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Lottie.asset(
+              'assets/loading.json',
+              width: 100,
+              height: 100,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Mohon Tunggu Sebentar...',
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      ),
+    );
+
     try {
+      // tunda ke next screen selama 2 detik
+      await Future.delayed(const Duration(seconds: 2));
+
       // Login dengan Firebase Authentication
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -60,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       // Verifikasi status user
       if (userData['status'] == 'inactive') {
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Akun Anda tidak aktif!")),
         );
@@ -67,19 +95,39 @@ class _LoginScreenState extends State<LoginScreen> {
       }
 
       if (isPasswordValid) {
+        // ignore: use_build_context_synchronously
+        if (context.mounted)
+          Navigator.of(context)
+              .pop(); // tutup dialog screen jika login berhasil
+        print(
+            'Role sebelum navigasi: ${userData['role']}'); // Log role sebelum navigasi
+
         // Berhasil login, redirect ke dashboard
         Navigator.pushReplacement(
+          // ignore: use_build_context_synchronously
           context,
           MaterialPageRoute(
-            builder: (context) => DashboardScreen(role: userData['role']),
+            builder: (context) => MainScreen(
+              role: userData['role'],
+              userId: userCredential.user?.uid ?? '',
+            ),
           ),
         );
       } else {
+        // ignore: use_build_context_synchronously
+        if (context.mounted)
+          Navigator.of(context)
+              .pop(); // tutup loading screen jika password salah
+        // ignore: use_build_context_synchronously
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Password salah!")),
         );
       }
     } on FirebaseAuthException catch (e) {
+      // ignore: use_build_context_synchronously
+      if (context.mounted)
+        Navigator.of(context).pop(); // tutup loading screen jika login gagal
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Login gagal: ${e.message}")),
       );
@@ -89,6 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.bg,
       body: SafeArea(
         child: LayoutBuilder(builder: (context, constraints) {
           return SingleChildScrollView(
@@ -101,10 +150,22 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      AppAssets.logo,
-                      width: 118,
-                      fit: BoxFit.fitWidth,
+                    Container(
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: AppColor.secondary.withOpacity(0.3),
+                            blurRadius: 15,
+                            spreadRadius: 2,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Image.asset(
+                        AppAssets.logo,
+                        width: 118,
+                        fit: BoxFit.fitWidth,
+                      ),
                     ),
                     const SizedBox(
                       height: 40,
@@ -121,6 +182,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 .copyWith(
                                   fontWeight: FontWeight.w500,
                                   fontSize: 24,
+                                  color: AppColor.primary,
                                 ),
                           ),
                           Text(
@@ -142,6 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextFormField(
                       controller: _emailController,
+                      textInputAction: TextInputAction.next,
                       decoration: InputDecoration(
                         isDense: true,
                         filled: true,
@@ -156,8 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         prefixIconColor: AppColor.grey,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:
-                              const BorderSide(color: AppColor.grey),
+                          borderSide: const BorderSide(color: AppColor.grey),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -198,8 +260,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         suffixIconColor: AppColor.grey,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
-                          borderSide:
-                              const BorderSide(color: AppColor.grey),
+                          borderSide: const BorderSide(color: AppColor.grey),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -216,6 +277,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         _login();
                       },
+                      borderRadius: 50,
+                      width: 122,
                     ),
                   ],
                 ),

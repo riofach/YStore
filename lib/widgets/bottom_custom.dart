@@ -7,62 +7,39 @@ class BottomCustom extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.isExpand,
+    this.borderRadius = 8,
+    this.width,
   });
 
   final String label;
   final Function onTap;
   final bool? isExpand;
+  final double borderRadius;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
-      child: Stack(
-        children: [
-          Align(
-            alignment: const Alignment(0, 0.7),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color.fromARGB(255, 116, 146, 170),
-                    offset: const Offset(0, 5),
-                    blurRadius: 5,
-                  ),
-                ],
-              ),
-              width: isExpand == true ? double.infinity : 122,
-              height: 40,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(label),
-            ),
+      width: width ?? (isExpand == true ? double.infinity : 361),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColor.secondary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(borderRadius),
           ),
-          Align(
-            child: Material(
-              color: AppColor.secondary,
-              borderRadius: BorderRadius.circular(20),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20),
-                onTap: () => onTap(),
-                child: Container(
-                  width: isExpand == true ? double.infinity : 122,
-                  height: 40,
-                  alignment: Alignment.center,
-                  child: Text(
-                    label,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          elevation: 5,
+          padding: const EdgeInsets.symmetric(vertical: 15),
+        ),
+        onPressed: () => onTap(),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+            fontFamily: 'Poppins',
+            color: AppColor.primary,
           ),
-        ],
+        ),
       ),
     );
   }

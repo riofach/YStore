@@ -1,0 +1,2 @@
+D:/RioRaditya/Ngoding/Mobile/ystore/android/app/.cxx/RelWithDebInfo/u2g716ri/x86/CMakeFiles/edit_cache.dir
+D:/RioRaditya/Ngoding/Mobile/ystore/android/app/.cxx/RelWithDebInfo/u2g716ri/x86/CMakeFiles/rebuild_cache.dir
