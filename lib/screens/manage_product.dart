@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:ystore/config/app_assets.dart';
 import 'package:ystore/config/app_color.dart';
-import 'package:ystore/screens/dashboard_screen.dart';
-import 'package:ystore/screens/manage_purchases.dart';
-import 'package:ystore/widgets/bottom_navigation.dart';
+// import 'package:ystore/screens/dashboard_screen.dart';
+// import 'package:ystore/screens/manage_purchases.dart';
+// import 'package:ystore/screens/manage_role.dart';
+// import 'package:ystore/screens/manage_sales.dart';
+// import 'package:ystore/screens/notifications_screen.dart';
+// import 'package:ystore/widgets/bottom_navigation.dart';
 import '../services/add_product.dart';
 
 class ManageProductScreen extends StatefulWidget {
@@ -18,7 +20,8 @@ class ManageProductScreen extends StatefulWidget {
 
 class _ManageProductScreenState extends State<ManageProductScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  int _currentIndex = 0;
+  // int _currentIndex = 1;
+  String _searchQuery = '';
 
   Future<void> _deleteProduct(String productId, String productName) async {
     try {
@@ -74,150 +77,150 @@ class _ManageProductScreenState extends State<ManageProductScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.bg,
       body: SafeArea(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Kelola Produk",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.only(top: 63.0, left: 10.0, right: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Kelola Produk",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w700,
+                        color: AppColor.primary,
+                      ),
                     ),
-                  ),
-                  CircleAvatar(
-                    backgroundImage: AssetImage(AppAssets.logo),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 10),
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: _firestore.collection('products').snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-
-                  if (snapshot.hasError) {
-                    return Center(
-                        child: Text("Terjadi error: ${snapshot.error}"));
-                  }
-
-                  if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                    return Center(child: Text("Tidak ada data produk."));
-                  }
-
-                  return ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      DocumentSnapshot document = snapshot.data!.docs[index];
-                      Map<String, dynamic> data =
-                          document.data() as Map<String, dynamic>;
-
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0, vertical: 6.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black12,
-                                blurRadius: 4,
-                                spreadRadius: 2,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: ListTile(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            title: Text(
-                              data['name'] ?? 'Tidak ada nama',
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            subtitle: Text(
-                              "Hb: ${data['buyPrice'] ?? 'kosong'}, Hj: ${data['sellPrice'] ?? 'kosong'}, Stok: ${data['stock'] ?? 0}",
-                            ),
-                            trailing: widget.role != 'kasir'
-                                ? Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: Icon(Icons.edit,
-                                            color: Colors.orange),
-                                        onPressed: () =>
-                                            _showEditProductDialog(document.id),
-                                      ),
-                                      IconButton(
-                                        icon: Icon(Icons.delete,
-                                            color: Colors.red),
-                                        onPressed: () =>
-                                            _showDeleteConfirmationDialog(
-                                                document.id,
-                                                data['name'] ??
-                                                    'Tidak ada nama'),
-                                      ),
-                                    ],
-                                  )
-                                : null,
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: CustomBottomNavigation(
-        currentIndex: _currentIndex,
-        onTap: (index) {
-          Navigator.pushNamed(context, '/dashboard');
-        },
-      ),
-      floatingActionButton: widget.role != 'kasir'
-          ? Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                color: AppColor.secondary,
-                borderRadius: BorderRadius.circular(50),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color.fromARGB(31, 0, 0, 0),
-                    blurRadius: 2,
-                    spreadRadius: 2,
-                    offset: Offset(0, 2),
-                  ),
-                ],
-              ),
-              child: FloatingActionButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => AddProductScreen()),
-                  );
-                },
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-                child: Icon(
-                  Icons.add,
-                  color: Colors.white,
-                  size: 30,
+                  ],
                 ),
               ),
-            )
-          : null,
+              Padding(
+                padding:
+                    const EdgeInsets.only(top: 24.0, left: 10.0, right: 10.0),
+                child: TextField(
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value.toLowerCase();
+                    });
+                  },
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    labelText: 'Cari berdasarkan nama produk',
+                    prefixIcon: Icon(Icons.search),
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _firestore.collection('products').snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: Text("Terjadi error: ${snapshot.error}"));
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return Center(child: Text("Tidak ada data produk."));
+                    }
+
+                    var filteredDocs = snapshot.data!.docs.where((doc) {
+                      var data = doc.data() as Map<String, dynamic>;
+                      var productName = data['name']?.toLowerCase() ?? '';
+                      return productName.contains(_searchQuery);
+                    }).toList();
+
+                    return ListView.builder(
+                      itemCount: filteredDocs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot document = filteredDocs[index];
+                        Map<String, dynamic> data =
+                            document.data() as Map<String, dynamic>;
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 6.0),
+                          child: Card(
+                            color: AppColor.white, // Warna lebih soft
+                            elevation: 1, // Elevasi lebih rendah
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(
+                                  15), // Membuat sudut lebih membulat
+                            ),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 16, vertical: 10),
+                              title: Text(
+                                data['name'] ?? 'Tidak ada nama',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle: Text(
+                                "Hb: ${data['buyPrice']}, Hj: ${data['sellPrice']}, Stok: ${data['stock']}",
+                              ),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.edit,
+                                        color:
+                                            AppColor.orange), // Warna ikon edit
+                                    onPressed: () {
+                                      _showEditProductDialog(document.id);
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(Icons.delete,
+                                        color: AppColor.maroon), // Ikon hapus
+                                    onPressed: () {
+                                      _showDeleteConfirmationDialog(
+                                          document.id, data['name']);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigasi ke halaman tambah user (register.dart)
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddProductScreen()),
+          );
+        },
+        backgroundColor: AppColor.secondary,
+        foregroundColor: AppColor.white,
+        elevation: 8.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Icon(
+          Icons.add,
+          size: 35,
+        ),
+      ),
     );
   }
 }

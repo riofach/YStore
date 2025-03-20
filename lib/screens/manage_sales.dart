@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:ystore/config/app_color.dart';
 import '../services/add_sale.dart';
 import 'sale_details_screen.dart';
 import '../services/auth_service.dart'; // Import AuthService
@@ -15,8 +16,8 @@ class _ManageSalesScreenState extends State<ManageSalesScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final AuthService _authService = AuthService(); // AuthService instance
   String? _userRole;
-  TextEditingController _startDateController = TextEditingController();
-  TextEditingController _endDateController = TextEditingController();
+  final TextEditingController _startDateController = TextEditingController();
+  final TextEditingController _endDateController = TextEditingController();
   DateTime? startDate;
   DateTime? endDate;
 
@@ -132,187 +133,258 @@ class _ManageSalesScreenState extends State<ManageSalesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Kelola Penjualan'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.filter_list),
-            onPressed: () {
-              _clearFilters();
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextFormField(
-                    controller: _startDateController,
-                    decoration: InputDecoration(labelText: 'Tanggal Mulai'),
-                    onTap: () async {
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(2000),
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
-                        _startDateController.text =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        setState(() {
-                          startDate = pickedDate;
-                        });
-                      }
-                    },
-                  ),
+      backgroundColor: AppColor.bg,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Kelola Penjualan',
+                      style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: AppColor.primary),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.filter_list),
+                      onPressed: () {
+                        _clearFilters();
+                      },
+                    ),
+                  ],
                 ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: TextFormField(
-                    controller: _endDateController,
-                    decoration: InputDecoration(labelText: 'Tanggal Akhir'),
-                    onTap: () async {
-                      if (startDate == null) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                              content:
-                                  Text("Pilih tanggal mulai terlebih dahulu")),
-                        );
-                        return;
-                      }
-                      DateTime? pickedDate = await showDatePicker(
-                        context: context,
-                        initialDate: startDate!,
-                        firstDate: startDate!,
-                        lastDate: DateTime(2100),
-                      );
-                      if (pickedDate != null) {
-                        _endDateController.text =
-                            DateFormat('yyyy-MM-dd').format(pickedDate);
-                        setState(() {
-                          endDate = pickedDate;
-                        });
-                      }
-                    },
-                  ),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFormField(
+                        controller: _startDateController,
+                        decoration: InputDecoration(
+                          labelText: 'Tanggal Mulai',
+                          border: UnderlineInputBorder(),
+                        ),
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(2000),
+                            lastDate: DateTime(2100),
+                          );
+                          if (pickedDate != null) {
+                            _startDateController.text =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                            setState(() {
+                              startDate = pickedDate;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Expanded(
+                      child: TextFormField(
+                        controller: _endDateController,
+                        decoration: InputDecoration(
+                          labelText: 'Tanggal Akhir',
+                          border: UnderlineInputBorder(),
+                        ),
+                        onTap: () async {
+                          if (startDate == null) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      "Pilih tanggal mulai terlebih dahulu")),
+                            );
+                            return;
+                          }
+                          DateTime? pickedDate = await showDatePicker(
+                            context: context,
+                            initialDate: startDate!,
+                            firstDate: startDate!,
+                            lastDate: DateTime(2100),
+                          );
+                          if (pickedDate != null) {
+                            _endDateController.text =
+                                DateFormat('yyyy-MM-dd').format(pickedDate);
+                            setState(() {
+                              endDate = pickedDate;
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('sales').snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                if (snapshot.hasError) {
-                  return Center(
-                      child: Text("Terjadi error: ${snapshot.error}"));
-                }
-
-                if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                  return Center(child: Text("Tidak ada data penjualan."));
-                }
-
-                List<DocumentSnapshot> filteredDocs =
-                    snapshot.data!.docs.where((doc) {
-                  DateTime saleDate =
-                      (doc.data() as Map<String, dynamic>)['saleDate'].toDate();
-                  if (startDate != null && endDate != null) {
-                    return saleDate.isAfter(startDate!) &&
-                        saleDate.isBefore(endDate!.add(Duration(days: 1)));
-                  } else if (startDate != null) {
-                    return saleDate.isAfter(startDate!);
-                  } else if (endDate != null) {
-                    return saleDate.isBefore(endDate!.add(Duration(days: 1)));
-                  } else {
-                    return true;
-                  }
-                }).toList();
-
-                return ListView.builder(
-                  itemCount: filteredDocs.length,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot saleDoc = filteredDocs[index];
-                    Map<String, dynamic> saleData =
-                        saleDoc.data() as Map<String, dynamic>;
-
-                    List<String> productNames = [];
-                    int totalQuantity = 0;
-                    int totalAmount = 0;
-
-                    if (saleData['products'] is List) {
-                      for (var product in saleData['products']) {
-                        productNames
-                            .add("${product['name']} (${product['quantity']})");
-                        totalQuantity += (product['quantity'] as num).toInt();
-                        totalAmount += ((product['quantity'] as num).toInt() *
-                            (product['sellPrice'] as num).toInt());
-                      }
-                    } else {
-                      productNames.add("Data produk tidak valid");
+              ),
+              Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                  stream: _firestore.collection('sales').snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
                     }
 
-                    String formattedDate = DateFormat('EEEE, d MMMM y', 'id_ID')
-                        .format(saleData['saleDate'].toDate());
-
-                    String displayedProducts = productNames.take(2).join(', ');
-                    if (productNames.length > 2) {
-                      displayedProducts += ', ......';
+                    if (snapshot.hasError) {
+                      return Center(
+                          child: Text("Terjadi error: ${snapshot.error}"));
                     }
 
-                    return FutureBuilder<String>(
-                      future: _fetchUserName(saleData['soldBy']),
-                      builder: (context, userSnapshot) {
-                        String soldBy = userSnapshot.data ?? 'Unknown';
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return Center(child: Text("Tidak ada data penjualan."));
+                    }
 
-                        return ListTile(
-                          title: Text("Produk: $displayedProducts"),
-                          subtitle:
-                              Text("Tgl: $formattedDate, Penjual: $soldBy"),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              if (saleData['products'] is List &&
-                                  saleData['products'].length >= 1)
-                                IconButton(
-                                  icon: Icon(Icons.visibility),
-                                  onPressed: () => _showSaleDetails(saleDoc.id),
-                                ),
-                              if (_userRole == 'admin' ||
-                                  _userRole == 'superAdmin')
-                                IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () =>
-                                      _showDeleteConfirmationDialog(saleDoc.id),
-                                ),
-                            ],
+                    List<DocumentSnapshot> filteredDocs =
+                        snapshot.data!.docs.where((doc) {
+                      DateTime saleDate =
+                          (doc.data() as Map<String, dynamic>)['saleDate']
+                              .toDate();
+                      if (startDate != null && endDate != null) {
+                        return saleDate.isAfter(startDate!) &&
+                            saleDate.isBefore(endDate!.add(Duration(days: 1)));
+                      } else if (startDate != null) {
+                        return saleDate.isAfter(startDate!);
+                      } else if (endDate != null) {
+                        return saleDate
+                            .isBefore(endDate!.add(Duration(days: 1)));
+                      } else {
+                        return true;
+                      }
+                    }).toList();
+
+                    return ListView.builder(
+                      itemCount: filteredDocs.length,
+                      itemBuilder: (context, index) {
+                        DocumentSnapshot saleDoc = filteredDocs[index];
+                        Map<String, dynamic> saleData =
+                            saleDoc.data() as Map<String, dynamic>;
+
+                        List<String> productNames = [];
+                        if (saleData['products'] is List) {
+                          for (var product in saleData['products']) {
+                            productNames.add(
+                                "${product['name']} (${product['quantity']})");
+                          }
+                        }
+
+                        String formattedDate =
+                            DateFormat('EEEE, d MMMM y', 'id_ID')
+                                .format(saleData['saleDate'].toDate());
+
+                        String displayedProducts =
+                            productNames.take(2).join(', ');
+                        if (productNames.length > 2) {
+                          displayedProducts += ', ....';
+                        }
+
+                        return Dismissible(
+                          key: Key(saleDoc.id),
+                          direction: DismissDirection.endToStart,
+                          confirmDismiss: (direction) async {
+                            return await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text("Konfirmasi Hapus"),
+                                  content: Text(
+                                      "Apakah Anda yakin ingin menghapus penjualan ini?"),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      child: Text("Batal"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                      },
+                                    ),
+                                    TextButton(
+                                      child: Text("Hapus"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(true);
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          onDismissed: (direction) {
+                            _deleteSale(saleDoc.id);
+                          },
+                          background: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 20),
+                            alignment: Alignment.centerRight,
+                            color: AppColor.maroon,
+                            child: Icon(
+                              Icons.delete,
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: Card(
+                            elevation: 2,
+                            color: AppColor.white,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: ListTile(
+                              contentPadding: EdgeInsets.all(16),
+                              title: Text(
+                                displayedProducts,
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              subtitle:
+                                  Text("Tgl: $formattedDate, Penjual: owner"),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(Icons.visibility,
+                                        color: AppColor.orange),
+                                    onPressed: () {
+                                      _showSaleDetails(saleDoc.id);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         );
                       },
                     );
                   },
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigate to add sale screen
+          // Navigasi ke halaman tambah user (register.dart)
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddSaleScreen()),
           );
         },
-        child: Icon(Icons.add),
+        backgroundColor: AppColor.secondary,
+        foregroundColor: AppColor.white,
+        elevation: 8.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(50),
+        ),
+        child: Icon(
+          Icons.add,
+          size: 35,
+        ),
       ),
     );
   }
