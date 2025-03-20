@@ -17,7 +17,7 @@ class PdfService {
     );
 
     // Load logo image from assets
-    final logoData = await flutter.rootBundle.load('assets/logo.png');
+    final logoData = await flutter.rootBundle.load('assets/images/logo.png');
     final logo = pw.Image(
       pw.MemoryImage(logoData.buffer.asUint8List()),
       width: 70, // Set explicit width

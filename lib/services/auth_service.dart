@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:bcrypt/bcrypt.dart'; // Import package bcrypt
+import 'package:bcrypt/bcrypt.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -43,7 +43,7 @@ class AuthService {
     }
   }
 
-  // Add or remove role (only for superAdmin)
+  //(only for superAdmin)
   Future<void> manageRole(String targetUserId, String newRole) async {
     try {
       await _firestore.collection('users').doc(targetUserId).update({

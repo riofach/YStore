@@ -1,0 +1,2 @@
+D:/Perkuliahan/Semester 6/Manajemen Proyek/YStore/android/app/.cxx/Debug/17k252i5/armeabi-v7a/CMakeFiles/edit_cache.dir
+D:/Perkuliahan/Semester 6/Manajemen Proyek/YStore/android/app/.cxx/Debug/17k252i5/armeabi-v7a/CMakeFiles/rebuild_cache.dir
